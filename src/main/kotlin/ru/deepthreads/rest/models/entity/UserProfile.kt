@@ -9,5 +9,8 @@ data class UserProfile(
     val nickname: String,
     val deepId: String,
     val pictureUrl: String,
-    val role: Int = Constants.ROLE.USER
+    val email: String?,
+    val subscriberUidList: List<String>,
+    val blockerUidList: List<String>,
+    val role: Int = Constants.ROLE.USER,
 ): BaseAPIEntity

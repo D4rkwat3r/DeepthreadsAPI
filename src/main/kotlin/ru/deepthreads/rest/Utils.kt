@@ -3,8 +3,8 @@ package ru.deepthreads.rest
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import ru.deepthreads.rest.models.entity.*
-import ru.deepthreads.rest.models.entity.*
 import ru.deepthreads.rest.models.views.*
+import ru.deepthreads.rest.services.CommentService
 import ru.deepthreads.rest.services.UserProfileService
 import java.util.*
 
@@ -28,6 +28,81 @@ object Utils {
     }
     fun idQuery(objectId: String): Query {
         return Query(Criteria.where("objectId").`is`(objectId))
+    }
+    fun safeDeepId(deepId: String): String {
+        return deepId
+            .replace(" ", "_")
+            .replace("?", "")
+            .replace("\"", "")
+            .replace("'", "")
+            .replace("!", "")
+            .replace("$", "")
+            .replace(";", "")
+            .replace("%", "")
+            .replace("^", "")
+            .replace(":", "")
+            .replace("&", "")
+            .replace("*", "")
+            .replace("(", "")
+            .replace(")", "")
+            .replace("-", "_")
+            .replace("+", "")
+            .replace("=", "")
+            .replace("/", "")
+            .replace("\\", "")
+            .replace("`", "")
+            .replace("¬", "")
+            .replace("<", "")
+            .replace(">", "")
+            .replace("{", "")
+            .replace("[", "")
+            .replace("}", "")
+            .replace("]", "")
+            .replace("|", "")
+            .replace(".", "_")
+    }
+
+    fun withoutScheme(url: String): String {
+        return url
+            .replace("https://", "")
+            .replace("http://", "")
+    }
+
+    fun castAccount(account: Account): AccountView {
+        return AccountView(
+            account.objectId,
+            account.createdTime,
+            account.status,
+            account.nickname,
+            account.deepId,
+            account.password,
+            account.authToken,
+            castUserProfile(account.userProfile)
+        )
+    }
+
+    fun castAccountList(accounts: List<Account>): List<AccountView> {
+        return accounts
+            .map { castAccount(it) }
+    }
+
+    fun castUserProfile(userProfile: UserProfile): UserProfileView {
+        return UserProfileView(
+            userProfile.objectId,
+            userProfile.createdTime,
+            userProfile.status,
+            userProfile.nickname,
+            userProfile.deepId,
+            userProfile.pictureUrl,
+            userProfile.subscriberUidList.size,
+            CommentService.getCount(userProfile.objectId, Constants.COMMENTPARENT.USER_PROFILE),
+            userProfile.role
+        )
+    }
+
+    fun castUserProfileList(userProfiles: List<UserProfile>): List<UserProfileView> {
+        return userProfiles
+            .map { castUserProfile(it) }
     }
 
     fun castChat(chat: Chat, userId: String): ChatView {
@@ -108,7 +183,7 @@ object Utils {
             post.coverUrl,
             post.backgroundUrl,
             post.likes.size,
-            post.comments.size,
+            CommentService.getCount(post.objectId, Constants.COMMENTPARENT.WALL_ITEM),
             post.likes.map { it.authorUid }.contains(userId)
         )
     }

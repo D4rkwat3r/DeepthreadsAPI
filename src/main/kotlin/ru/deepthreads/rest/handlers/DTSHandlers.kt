@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import ru.deepthreads.rest.exceptions.dts.AccessDenied
-import ru.deepthreads.rest.models.DebugFields
+import ru.deepthreads.rest.models.other.DebugFields
 import ru.deepthreads.rest.models.response.errors.AccessDeniedResponse
 
 @ControllerAdvice

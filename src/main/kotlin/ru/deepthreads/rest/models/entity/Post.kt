@@ -9,6 +9,5 @@ data class Post(
     val content: String,
     val coverUrl: String,
     val backgroundUrl: String,
-    val likes: List<Like>,
-    val comments: List<Comment>
+    val likes: List<Like>
 ): BaseAPIEntity

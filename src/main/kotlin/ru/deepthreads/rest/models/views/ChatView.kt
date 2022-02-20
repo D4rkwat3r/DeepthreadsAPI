@@ -1,7 +1,6 @@
 package ru.deepthreads.rest.models.views
 
 import ru.deepthreads.rest.models.entity.BaseAPIEntity
-import ru.deepthreads.rest.models.entity.UserProfile
 
 class ChatView(
     override val objectId: String,
@@ -11,7 +10,7 @@ class ChatView(
     val iconUrl: String?,
     val backgroundUrl: String?,
     val type: Int,
-    val owner: UserProfile,
+    val owner: UserProfileView,
     val lastMessage: MessageView?,
     val membersCount: Int,
     val meInChat: Boolean

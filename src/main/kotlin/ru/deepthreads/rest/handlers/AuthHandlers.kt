@@ -7,15 +7,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import ru.deepthreads.rest.exceptions.auth.IncorrectPassword
-import ru.deepthreads.rest.exceptions.auth.NonexistentAccount
-import ru.deepthreads.rest.exceptions.auth.TakenDeepID
-import ru.deepthreads.rest.exceptions.auth.Unauthorized
-import ru.deepthreads.rest.models.DebugFields
-import ru.deepthreads.rest.models.response.errors.IncorrectPasswordResponse
-import ru.deepthreads.rest.models.response.errors.NonexistentAccountResponse
-import ru.deepthreads.rest.models.response.errors.TakenDeepIDResponse
-import ru.deepthreads.rest.models.response.errors.UnauthorizedResponse
+import ru.deepthreads.rest.exceptions.auth.*
+import ru.deepthreads.rest.models.other.DebugFields
+import ru.deepthreads.rest.models.response.errors.*
 
 @ControllerAdvice
 class AuthHandlers : ResponseEntityExceptionHandler() {
@@ -24,8 +18,22 @@ class AuthHandlers : ResponseEntityExceptionHandler() {
         val body = IncorrectPasswordResponse(
             debugFields = DebugFields(
                 exception::class.java.name,
-                null
+                exception.message
             )
+        )
+        return ResponseEntity
+            .status(HttpStatus.FORBIDDEN)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(body)
+    }
+    @ExceptionHandler(GoogleAuthFail::class)
+    fun handle(exception: GoogleAuthFail, request: WebRequest): ResponseEntity<GoogleAuthFailResponse> {
+        val body = GoogleAuthFailResponse(
+            debugFields = DebugFields(
+                exception::class.java.name,
+                exception.message
+            ),
+            googleAuthException = exception.googleAuthException
         )
         return ResponseEntity
             .status(HttpStatus.FORBIDDEN)

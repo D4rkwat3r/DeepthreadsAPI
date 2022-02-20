@@ -7,7 +7,7 @@ import org.springframework.web.socket.WebSocketHandler
 import org.springframework.web.socket.server.HandshakeInterceptor
 import ru.deepthreads.rest.exceptions.auth.Unauthorized
 import ru.deepthreads.rest.mapper
-import ru.deepthreads.rest.models.DebugFields
+import ru.deepthreads.rest.models.other.DebugFields
 import ru.deepthreads.rest.models.response.errors.UnauthorizedResponse
 import ru.deepthreads.rest.services.AccountService
 import java.lang.Exception

@@ -4,8 +4,10 @@ import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Service
 import ru.deepthreads.rest.Constants
 import ru.deepthreads.rest.Utils
-import ru.deepthreads.rest.exceptions.other.AlreadyAMember
-import ru.deepthreads.rest.exceptions.other.NotAMember
+import ru.deepthreads.rest.exceptions.dts.AccessDenied
+import ru.deepthreads.rest.exceptions.chat.AlreadyAMember
+import ru.deepthreads.rest.exceptions.chat.NotAMember
+import ru.deepthreads.rest.exceptions.chat.YouAreBlocked
 import ru.deepthreads.rest.exceptions.other.NotFound
 import ru.deepthreads.rest.models.entity.Chat
 import ru.deepthreads.rest.models.entity.Message
@@ -55,6 +57,11 @@ object ChatService {
             addChatMessage(ownerUid, initialMessage, chat.objectId, Constants.MESSAGETYPE.NORMAL)
         }
         uidPreset?.forEach { uid ->
+            if (UserProfileService.getBlocked(uid).map { it.objectId }.contains(ownerUid)) {
+                throw YouAreBlocked(
+                    UserProfileService.getUser(uid).nickname
+                )
+            }
             addMember(chat.objectId, uid)
         }
         return Utils.castChat(chat, userId)

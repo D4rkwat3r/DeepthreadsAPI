@@ -7,13 +7,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import ru.deepthreads.rest.exceptions.other.AlreadyAMember
-import ru.deepthreads.rest.exceptions.other.NotAMember
+import ru.deepthreads.rest.exceptions.other.Conflict
 import ru.deepthreads.rest.exceptions.other.NotFound
-import ru.deepthreads.rest.models.DebugFields
-import ru.deepthreads.rest.models.response.errors.AlreadyMember
+import ru.deepthreads.rest.models.other.DebugFields
+import ru.deepthreads.rest.models.response.errors.ConflictResponse
 import ru.deepthreads.rest.models.response.errors.NotFoundResponse
-import ru.deepthreads.rest.models.response.errors.NotMember
 import java.io.FileNotFoundException
 import java.lang.NullPointerException
 
@@ -58,9 +56,9 @@ class OtherHandlers : ResponseEntityExceptionHandler() {
             .contentType(MediaType.APPLICATION_JSON)
             .body(body)
     }
-    @ExceptionHandler(AlreadyAMember::class)
-    fun handle(exception: AlreadyAMember, request: WebRequest): ResponseEntity<AlreadyMember> {
-        val body = AlreadyMember(
+    @ExceptionHandler(Conflict::class)
+    fun handle(exception: Conflict, request: WebRequest): ResponseEntity<ConflictResponse> {
+        val body = ConflictResponse(
             debugFields = DebugFields(
                 exception::class.java.name,
                 exception.message
@@ -68,19 +66,6 @@ class OtherHandlers : ResponseEntityExceptionHandler() {
         )
         return ResponseEntity
             .status(HttpStatus.CONFLICT)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(body)
-    }
-    @ExceptionHandler(NotAMember::class)
-    fun handle(exception: NotAMember, request: WebRequest): ResponseEntity<NotMember> {
-        val body = NotMember(
-            debugFields = DebugFields(
-                exception::class.java.name,
-                exception.message
-            )
-        )
-        return ResponseEntity
-            .status(HttpStatus.FORBIDDEN)
             .contentType(MediaType.APPLICATION_JSON)
             .body(body)
     }

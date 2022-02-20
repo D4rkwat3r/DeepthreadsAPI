@@ -27,10 +27,10 @@ class MediaController {
         newFile.createNewFile()
         file.transferTo(newFile)
         return UploadFileResponse(
-            resourceUrl = "http://deepthreads.ru/dynamic/$type/$name"
+            resourceUrl = "http://media.deepthreads.ru/$type/$name"
         )
     }
-    @GetMapping("/dynamic/{type}/{name}")
+    @GetMapping("/{type}/{name}")
     fun get(
         @PathVariable("type") type: String,
         @PathVariable("name") name: String
@@ -51,7 +51,7 @@ class MediaController {
             .contentType(mType)
             .body(FileSystemResource(file))
     }
-    @GetMapping("/static/{name}")
+    @GetMapping("/{name}")
     fun getStatic(
         @PathVariable("name") name: String
     ): ResponseEntity<FileSystemResource> {

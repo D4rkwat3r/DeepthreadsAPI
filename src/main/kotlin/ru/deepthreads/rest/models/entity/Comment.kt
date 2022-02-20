@@ -6,5 +6,7 @@ data class Comment(
     override val status: Int,
     val authorUid: String,
     val content: String,
-    val likes: List<Like>
+    val likes: List<Like>,
+    val parentId: String,
+    val parentType: Int
 ): BaseAPIEntity

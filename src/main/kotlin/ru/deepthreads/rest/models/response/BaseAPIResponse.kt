@@ -1,6 +1,6 @@
 package ru.deepthreads.rest.models.response
 
-import ru.deepthreads.rest.models.DebugFields
+import ru.deepthreads.rest.models.other.DebugFields
 
 interface BaseAPIResponse {
     val apiStatusCode: Int

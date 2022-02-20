@@ -4,7 +4,7 @@ import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import ru.deepthreads.rest.mapper
-import ru.deepthreads.rest.models.WebSocketClient
+import ru.deepthreads.rest.models.other.WebSocketClient
 import ru.deepthreads.rest.models.websockets.WebSocketAction
 import ru.deepthreads.rest.models.websockets.WebSocketServerMessage
 import ru.deepthreads.rest.services.AccountService

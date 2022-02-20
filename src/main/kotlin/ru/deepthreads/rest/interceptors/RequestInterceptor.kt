@@ -3,6 +3,7 @@ package ru.deepthreads.rest.interceptors
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.web.servlet.HandlerInterceptor
+import ru.deepthreads.rest.Utils
 import ru.deepthreads.rest.dts.DTSValidator
 import ru.deepthreads.rest.exceptions.auth.Unauthorized
 import ru.deepthreads.rest.exceptions.other.InvalidRequest
@@ -10,13 +11,16 @@ import ru.deepthreads.rest.services.AccountService
 
 class RequestInterceptor : HandlerInterceptor {
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+        val url = Utils.withoutScheme(request.requestURL.toString())
+        if (url.startsWith("static.")
+            || url.startsWith("media.")) {
+            return true
+        }
         if (request.requestURI.startsWith("/api")) {
             verifyRequestSignatures(request)
         }
         if (!request.requestURI.contains("/auth/")
             && !request.requestURI.contains("/upload-media")
-            && !request.requestURI.contains("/static/")
-            && !request.requestURI.contains("/dynamic/")
             && !request.requestURI.contains("/event-log/")
             || request.requestURI.contains("/users/me")
             || request.requestURI.contains("/me/")
